@@ -99,19 +99,23 @@ jobs:
     docker:
       - image: cimg/node:15.6.0
     steps:
+      - checkout
       - run:
-          name: Get backend url
+          name: Run an audit of the frontend
           command: |
-            # your code here
+            cd ./frontend
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
       - image: cimg/node:15.6.0
     steps:
+      - checkout
       - run:
-          name: Get backend url
+          name: Run an audit of the backend
           command: |
-            # your code here
+            cd ./backend
+            npm audit --audit-level=critical
           
 
   deploy-infrastructure:
@@ -289,3 +293,7 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
+      - scan-frontend:
+          requires: [test-frontend]
+      - scan-backend:
+          requires: [test-backend]
