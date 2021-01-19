@@ -60,6 +60,7 @@ jobs:
       - run:
           name: Back-end build
           command: |
+            cd backend
             npm i
             npm run build
       - save_cache:
@@ -83,7 +84,6 @@ jobs:
       - run:
           name: Test backend
           command: |
-            cd backend
             sudo npm i
             sudo npm run test
             
