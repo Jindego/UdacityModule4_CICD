@@ -71,6 +71,9 @@ jobs:
     docker:
       - image: cimg/node:15.6.0
     steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Test frontend
           command: |
@@ -81,6 +84,9 @@ jobs:
     docker:
       - image: cimg/node:15.6.0
     steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Test backend
           command: |
