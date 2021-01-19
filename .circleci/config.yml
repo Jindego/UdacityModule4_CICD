@@ -75,7 +75,7 @@ jobs:
           name: Test frontend
           command: |
             pwd
-            ls -ltr
+            ls
             sudo npm i
             sudo npm run test
                 
@@ -87,7 +87,7 @@ jobs:
           name: Test backend
           command: |
             pwd
-            ls -ltr
+            ls
             sudo npm i
             sudo npm run test
             
