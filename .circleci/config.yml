@@ -46,7 +46,7 @@ jobs:
             cd ./frontend
             npm i
             npm run build
-            
+
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -79,6 +79,7 @@ jobs:
           name: Test frontend
           command: |
             cd ./frontend
+            sudo npm install oauth-sign
             sudo npm run test
                 
   test-backend:
