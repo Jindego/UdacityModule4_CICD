@@ -26,9 +26,9 @@ commands:
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
+              cd ~/project/backend
+              npm install
+              Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
             
@@ -71,39 +71,44 @@ jobs:
 
   test-frontend:
     docker:
-      # Docker image here
+      - image: cimg/node:15.6.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
                 
   test-backend:
     docker:
-      # Docker image here
+      - image: cimg/node:15.6.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
             
   scan-frontend:
     docker:
-      # Docker image here
+      - image: cimg/node:15.6.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
 
   scan-backend:
     docker:
-      # Docker image here
+      - image: cimg/node:15.6.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+          
 
   deploy-infrastructure:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - run:
@@ -137,7 +142,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.12 
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -156,7 +161,7 @@ jobs:
 
   run-migrations:
     docker:
-      # Docker image here that supports NodeJS
+      - image: cimg/node:15.6.0
     steps:
       # Checkout code from git
       - run:
@@ -173,7 +178,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - run:
@@ -194,7 +199,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.12 
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -211,7 +216,7 @@ jobs:
 
   smoke-test:
     docker:
-      # Lightweight Docker image 
+      - image: cimg/base:2020.01 
     steps:
       # Checkout code from git
       - run:
@@ -234,7 +239,7 @@ jobs:
 
   cloudfront-update:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - run:
@@ -249,7 +254,7 @@ jobs:
 
 cleanup:
     docker:
-      # Docker image here
+      - image: cimg/base:2020.01 
     steps:
       # Checkout code from git
       - run:
