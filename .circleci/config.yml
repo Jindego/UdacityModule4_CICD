@@ -1,5 +1,7 @@
 version: 2.1
-
+orbs:
+  slack: circleci/slack@4.2.0
+  
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -122,7 +124,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -297,3 +299,5 @@ workflows:
           requires: [test-frontend]
       - scan-backend:
           requires: [test-backend]
+      - deploy-infrastructure:
+          requires: [scan-backend]
