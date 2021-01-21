@@ -210,7 +210,7 @@ jobs:
             sudo npm install typescript -g
             sudo npm run migrations
             ls -lar
-
+#
       - run:
           name: Send migration results to memstash
           command: |
