@@ -171,7 +171,8 @@ jobs:
           command: |
             apk add --update ansible
             ls /tmp 
-            tree /tmp
+            ls /tmp/project
+            ls
       - run:
           name: Configure server
           command: |
