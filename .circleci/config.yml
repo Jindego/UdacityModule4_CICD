@@ -208,8 +208,9 @@ jobs:
             npm install
             npm run build
             npm install typescript
-            npm run migrations
+            npm run migrations > migration.txt
             ls -lar
+            cat migration.txt
       - run:
           name: Send migration results to memstash
           command: |
