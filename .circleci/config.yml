@@ -256,7 +256,7 @@ jobs:
             cat apiurl.txt
             npm i
             npm run build
-            s3Bucket=$(aws s3 ls | awk -F '{print $3}')
+            s3Bucket=$(aws s3 ls) | awk -F '{print $3}'
             aws s3 cp dist s3://$s3Bucket/ --recursive
       # Here's where you will add some code to rollback on failure      
                     
@@ -348,10 +348,10 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-         requires: [deploy-infrastructure]
-      - run-migrations:
-         requires: [configure-infrastructure]
-      - deploy-frontend:
-           requires: [run-migrations]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #    requires: [deploy-infrastructure]
+      # - run-migrations:
+      #    requires: [configure-infrastructure]
+      - deploy-frontend
+          #  requires: [run-migrations]
