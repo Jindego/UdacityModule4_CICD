@@ -235,7 +235,7 @@ jobs:
       # Checkout code from git
       - run:
           name: Install dependencies
-          command: 
+          command: |
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
             sudo apt-get -qq install awscli
