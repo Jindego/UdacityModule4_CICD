@@ -144,7 +144,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"\
               --tags project=udapeopleFrontend
       - run:
-          name: Add back-end ip to ansible inventory
+          name: Add back-end ip to ansible inventory & generate memstash links
           command: |
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
             backendip=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
@@ -153,7 +153,6 @@ jobs:
 
             backendurl=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
             curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendurl" https://api.memstash.io/values/ec2_back_url
-            url=`curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_url`
 
       - persist_to_workspace:
           root: .circleci
@@ -258,7 +257,7 @@ jobs:
             npm i
             npm run build
             ls dist
-            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0-7}/ --recursive
+            aws s3 cp dist s3://udapeople-1aab403/ --recursive
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -349,10 +348,10 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-         requires: [deploy-infrastructure]
-      - run-migrations:
-         requires: [configure-infrastructure]
-      - deploy-frontend:
-           requires: [run-migrations]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #    requires: [deploy-infrastructure]
+      # - run-migrations:
+      #    requires: [configure-infrastructure]
+      - deploy-frontend
+          #  requires: [run-migrations]
