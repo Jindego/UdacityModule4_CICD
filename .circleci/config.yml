@@ -205,12 +205,11 @@ jobs:
             echo -e "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> .env
             echo -e "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> .env
             echo -e VERSION=1 >> .env
-            sudo npm install --unsafe-perm=true --allow-root   
+            npm install
             sudo npm run build
             sudo npm install typescript -g
             sudo npm run migrations
             ls -lar
-#
       - run:
           name: Send migration results to memstash
           command: |
