@@ -256,8 +256,9 @@ jobs:
             cat apiurl.txt
             npm i
             npm run build
-            s3Bucket=$(aws s3 ls) | awk -F '{print $3}'
-            aws s3 cp dist s3://$s3Bucket/ --recursive
+            s3Bucket1=$(aws s3 ls)
+            s3Bucket2=$(echo $s3Bucket1 | awk -F '{print $3}')
+            aws s3 cp dist s3://$s3Bucket2/ --recursive
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
