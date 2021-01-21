@@ -213,8 +213,9 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
-            #!/bin/bash
+            #!/bin/bash -x
             cd backend
+            cat migration.txt
             if [ $(grep -i "has been executed successfully" migration.txt | wc -l) == 1 ]
               then 
               echo "yo yo"
