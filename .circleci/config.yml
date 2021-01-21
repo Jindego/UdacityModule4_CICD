@@ -209,7 +209,6 @@ jobs:
             sudo npm run build
             sudo npm install typescript -g
             sudo npm run migrations
-            cat /home/circleci/.npm/_logs/*-debug.log
       - run:
           name: Send migration results to memstash
           command: |
