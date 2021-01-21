@@ -253,7 +253,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
-            API_URL=$(cat apiurl.txt)
+            export API_URL=$(cat apiurl.txt)
             npm i
             npm run build
             ls dist
