@@ -246,17 +246,13 @@ jobs:
           command: |
             API_IPback=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
             export API_URL=$(echo "https://$API_IPback:3030")
-            echo "${API_URL}"
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - API_URL     
+            cd frontend
+            echo "${API_URL}" > apiurl.txt
 
       - run:
           name: Deploy frontend objects
           command: |
-            echo "${API_URL}"
+            API_URL=$(cat apiurl.txt)
             cd frontend
             npm i
             npm run build
