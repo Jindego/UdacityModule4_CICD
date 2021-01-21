@@ -185,12 +185,13 @@ jobs:
     docker:
       - image: cimg/node:15.6.0
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Run migrations
           command: |
-            # Your code here
-            exit 1
+            cd backend
+            npm i
+            npm run migrations
       - run:
           name: Send migration results to memstash
           command: |
@@ -307,6 +308,7 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+      #- deploy-infrastructure
+      #- configure-infrastructure:
+      #    requires: [deploy-infrastructure]
+      - run-migrations
