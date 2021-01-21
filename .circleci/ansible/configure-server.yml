@@ -18,7 +18,10 @@
       become: true
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
       changed_when: false
-  
+
+  roles:
+    - configure-server
+
   environment:
     ENVIRONMENT: production
     TYPEORM_CONNECTION: postgres
@@ -29,5 +32,3 @@
     TYPEORM_PASSWORD: password
     TYPEORM_DATABASE: database-1
 
-  roles:
-    - configure-server
