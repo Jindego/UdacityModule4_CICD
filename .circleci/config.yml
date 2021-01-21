@@ -189,9 +189,9 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3
-            sudo apt-get -qq install awscli
+            apt-get -y -qq update
+            apt-get -y -qq install python3
+            apt-get -qq install awscli
             cd backend
             echo -e "ENVIRONMENT=production" > .env
             echo -e "TYPEORM_CONNECTION=$TYPEORM_CONNECTION" >> .env
