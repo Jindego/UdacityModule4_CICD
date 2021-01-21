@@ -218,9 +218,9 @@ jobs:
             cat migration.txt
             if [ $(grep -i "has been executed successfully" migration.txt | wc -l) == 1 ]
               then 
-              echo "yo yo"
+              curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "Migration Successful" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
               else
-              echo "no no"
+              curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "Migration Failed" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
       - destroy-environment
 
