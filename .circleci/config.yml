@@ -151,16 +151,14 @@ jobs:
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
 
-            ec2url=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
-            
-            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$ec2url" https://api.memstash.io/values/ec2_back_url
+            backendurl=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
+            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendurl" https://api.memstash.io/values/ec2_back_url
             url=`curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_url`
-            echo $url 
 
       - persist_to_workspace:
-          root: ~/
+          root: .circleci
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
