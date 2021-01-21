@@ -207,6 +207,7 @@ jobs:
             echo -e VERSION=1 >> .env
             sudo npm install     
             sudo npm run build
+            ls -lar
 
       - run:
           name: Send migration results to memstash
