@@ -189,9 +189,9 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            apt-get -y -qq update
-            apt-get -y -qq install python3
-            apt-get -qq install awscli
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install python3
+            sudo apt-get -qq install awscli
             cd backend
             echo -e "ENVIRONMENT=production" > .env
             echo -e "TYPEORM_CONNECTION=$TYPEORM_CONNECTION" >> .env
@@ -205,10 +205,10 @@ jobs:
             echo -e "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> .env
             echo -e "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> .env
             echo -e VERSION=1 >> .env
-            npm install     
-            npm run build
-            npm install typescript -g
-            npm run migrations
+            sudo npm install --unsafe-perm=true --allow-root   
+            sudo npm run build
+            sudo npm install typescript -g
+            sudo npm run migrations
             ls -lar
 
       - run:
