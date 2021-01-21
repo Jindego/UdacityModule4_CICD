@@ -235,8 +235,7 @@ jobs:
       # Checkout code from git
       - run:
           name: Install dependencies
-          command: |
-            sudo apt-get -y -qq update
+          command: #
 
       - run:
           name: Get backend url
