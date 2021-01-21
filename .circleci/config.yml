@@ -195,7 +195,7 @@ jobs:
             cd backend
             sudo npm install     
             sudo npm run build
-            npm install typescript -g
+            sudo npm install typescript -g
             sudo npm run migrations
             cat /home/circleci/.npm/_logs/*-debug.log
       - run:
