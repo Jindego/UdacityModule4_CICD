@@ -190,6 +190,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm install typescript -g
             npm run migrations
             cat /home/circleci/.npm/_logs/*-debug.log
       - run:
