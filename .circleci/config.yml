@@ -251,7 +251,11 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            echo "${API_URL}"
+            cd frontend
+            npm i
+            npm run build
+            ls dist
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -342,10 +346,10 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-         requires: [deploy-infrastructure]
-      - run-migrations:
-         requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #    requires: [deploy-infrastructure]
+      # - run-migrations:
+      #    requires: [configure-infrastructure]
+      - deploy-frontend
+          # requires: [run-migrations]
