@@ -193,6 +193,8 @@ jobs:
             sudo apt-get -y -qq install python3
             sudo apt-get -qq install awscli
             cd backend
+            sudo npm install     
+            sudo npm run build
             npm install typescript -g
             sudo npm run migrations
             cat /home/circleci/.npm/_logs/*-debug.log
