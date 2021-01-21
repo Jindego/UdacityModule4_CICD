@@ -301,7 +301,7 @@ workflows:
       #    requires: [build-backend]
      # - scan-frontend:
      #     requires: [test-frontend]
-      - scan-backend:
+      #- scan-backend:
          requires: [test-backend]
       - deploy-infrastructure
       - configure-infrastructure:
