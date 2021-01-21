@@ -258,6 +258,7 @@ jobs:
             npm run build
             s3Bucket=$(aws s3api list-buckets --query "Buckets[].Name" --output text)
             aws s3 cp dist s3://$s3Bucket/ --recursive
+            echo "http://$s3Bucket.s3-website-us-west-2.amazonaws.com"
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
