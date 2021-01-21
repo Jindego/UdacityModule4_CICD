@@ -189,9 +189,12 @@ jobs:
       - run:
           name: Run migrations
           command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install python3
+            sudo apt-get -qq install awscli
             cd backend
             npm install typescript -g
-            npm run migrations
+            sudo npm run migrations
             cat /home/circleci/.npm/_logs/*-debug.log
       - run:
           name: Send migration results to memstash
