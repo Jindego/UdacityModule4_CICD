@@ -243,7 +243,7 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            API_URL=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_url)
+            export API_URL=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_url)
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
