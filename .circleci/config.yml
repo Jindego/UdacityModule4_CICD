@@ -175,13 +175,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            apk add --update py3-pip
-            pip3 install --upgrade pip 
-            pip3 install awscli
-            cat /tmp/ansible/inventory.txt
-            ls 
-            ls .circleci 
-            ls /tmp 
       - run:
           name: Configure server
           command: |
@@ -315,6 +308,5 @@ workflows:
       #- scan-backend:
       #   requires: [test-backend]
       #- deploy-infrastructure
-      - configure-infrastructure
-      #:
-      #    requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
