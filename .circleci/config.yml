@@ -233,9 +233,9 @@ jobs:
       - image: amazon/aws-cli
     steps:
       # Checkout code from git
-      - run:
-          name: Install dependencies
-          command: #
+      #- run:
+       #   name: Install dependencies
+       #   command: #
 
       - run:
           name: Get backend url
