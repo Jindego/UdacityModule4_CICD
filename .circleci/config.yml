@@ -207,8 +207,7 @@ jobs:
             echo -e VERSION=1 >> .env
             sudo npm install     
             sudo npm run build
-            sudo npm install typescript -g
-            sudo npm run migrations
+
       - run:
           name: Send migration results to memstash
           command: |
