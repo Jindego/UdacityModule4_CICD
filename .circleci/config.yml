@@ -305,6 +305,6 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+      #- deploy-infrastructure
+      - configure-infrastructure
+      #$    requires: [deploy-infrastructure]
