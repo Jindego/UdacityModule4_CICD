@@ -170,6 +170,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            ls /tmp 
       - run:
           name: Configure server
           command: |
