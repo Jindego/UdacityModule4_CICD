@@ -158,6 +158,7 @@ jobs:
           paths:
             - ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
+      - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -178,6 +179,7 @@ jobs:
           command: |
             ansible-playbook -i /tmp/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
+      - destroy-environment
 
   run-migrations:
     docker:
@@ -195,7 +197,9 @@ jobs:
           name: Send migration results to memstash
           command: |
             # Your code here
-            exit 1
+           
+      - destroy-environment
+
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
