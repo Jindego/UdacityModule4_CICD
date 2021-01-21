@@ -191,6 +191,7 @@ jobs:
           command: |
             cd backend
             npm run migrations
+            cat /home/circleci/.npm/_logs/*-debug.log
       - run:
           name: Send migration results to memstash
           command: |
