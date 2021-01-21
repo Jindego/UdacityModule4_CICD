@@ -206,9 +206,9 @@ jobs:
             echo -e "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> .env
             echo -e VERSION=1 >> .env
             npm install
-            sudo npm run build
-            sudo npm install typescript -g
-            sudo npm run migrations
+            npm run build
+            npm install typescript
+            npm run migrations
             ls -lar
       - run:
           name: Send migration results to memstash
