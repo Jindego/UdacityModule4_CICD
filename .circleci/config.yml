@@ -205,10 +205,10 @@ jobs:
             echo -e "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> .env
             echo -e "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> .env
             echo -e VERSION=1 >> .env
-            sudo npm install     
-            sudo npm run build
-            sudo npm install typescript -g
-            sudo npm run migrations
+            npm install     
+            npm run build
+            npm install typescript -g
+            npm run migrations
             ls -lar
 
       - run:
