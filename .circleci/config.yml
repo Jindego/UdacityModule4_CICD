@@ -220,7 +220,7 @@ jobs:
               echo "yo yo"
               else
               echo "no no"
-           fi
+            fi
       - destroy-environment
 
      # Here's where you will add some code to rollback on failure      
