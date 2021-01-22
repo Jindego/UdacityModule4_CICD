@@ -280,7 +280,8 @@ jobs:
           name: Deploy backend
           working_directory: /tmp
           command: |
-            file1=(/tmp/backend/.env)
+            ls -latr
+            file1=(/backend/.env)
             echo ENVIROMENT=production > $file1
             echo TYPEORM_CONNECTION=postgres >> $file1
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $file1
