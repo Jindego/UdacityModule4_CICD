@@ -168,7 +168,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 0d:e9:69:0b:e7:4e:d0:54:77:c3:fa:c0:de:16:04:ab
+            - 9e:a8:42:7b:87:90:8f:17:5b:98:80:0c:3e:19:eb:e6
       - attach_workspace:
           at: /tmp
       - run:
@@ -268,7 +268,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 0d:e9:69:0b:e7:4e:d0:54:77:c3:fa:c0:de:16:04:ab
+            - 9e:a8:42:7b:87:90:8f:17:5b:98:80:0c:3e:19:eb:e6
       - attach_workspace:
           at: .
       - run:
