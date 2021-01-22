@@ -1,9 +1,9 @@
- - name: "install pre-reqs for Ansible."
-      become: true
-      apt:
-        name: ["python3", "tar", "gzip"]
-        state: latest
-        update_cache: yes
+- name: "install pre-reqs for Ansible."
+  become: true
+  apt:
+      name: ["python3", "tar", "gzip"]
+      state: latest
+      update_cache: yes
 
 - name: Create APP Directory
   become_user: ubuntu
