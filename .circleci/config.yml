@@ -193,6 +193,7 @@ jobs:
           command: |
             # sudo apt-get -y -qq update
             # sudo apt-get -qq install awscli
+            touch .env
             echo ENVIROMENT=production > .env
             echo TYPEORM_CONNECTION=postgres >> .env
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> .env
@@ -281,6 +282,7 @@ jobs:
           command: |
             ls -latr
             file1=(/backend/.env)
+            touch $file1
             echo ENVIROMENT=production > $file1
             echo TYPEORM_CONNECTION=postgres >> $file1
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $file1
