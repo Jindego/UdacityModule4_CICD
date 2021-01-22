@@ -197,6 +197,7 @@ jobs:
             cp development.env .env
             cp development.env production.env
             ls
+            npm i
             npm run migrations > migration.txt
 
       - run:
