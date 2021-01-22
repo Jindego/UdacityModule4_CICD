@@ -314,7 +314,7 @@ jobs:
           name: Get backend url & Backend smoke test.
           command: |
             back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
-            curl $back_ip
+            curl -vvv "http://${$back_ip}:3030/api/status"
 
       - run:
           name: Frontend smoke test.
@@ -372,14 +372,14 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-            requires: [deploy-infrastructure]
-      - run-migrations:
-            requires: [configure-infrastructure]
-      - deploy-frontend:
-            requires: [run-migrations]
-      - deploy-backend:
-            requires: [deploy-frontend]
-      - smoke-test:
-            requires: [deploy-backend]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #       requires: [deploy-infrastructure]
+      # - run-migrations:
+      #       requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #       requires: [run-migrations]
+      # - deploy-backend:
+      #       requires: [deploy-frontend]
+      - smoke-test
+            # requires: [deploy-backend]
