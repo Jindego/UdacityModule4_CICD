@@ -259,7 +259,7 @@ jobs:
             npm run build
             s3Bucket=$(aws s3api list-buckets --query "Buckets[].Name" --output text)
             aws s3 sync dist s3://$s3Bucket/
-            s3FullUrl=(echo "http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
+            s3FullUrl=("http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
             curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket
             # aws s3 cp dist s3://$s3Bucket/ --recursive
       # Here's where you will add some code to rollback on failure      
@@ -379,7 +379,7 @@ workflows:
       #       requires: [configure-infrastructure]
       # - deploy-frontend:
       #       requires: [run-migrations]
-      # - deploy-backend:
+       - deploy-backend
       #       requires: [deploy-frontend]
-      - smoke-test
+      #- smoke-test
             # requires: [deploy-backend]

@@ -23,7 +23,6 @@
 - name: untar
   become_user: ubuntu
   become: yes
-  ignore_errors: True
   unarchive:
     src: ~/project/backend.tar
     dest: ~/app
@@ -34,3 +33,11 @@
   shell: |
     cd ~/app/backend
     pm2 start npm --name backend -- start 
+
+- name: Check running processes
+  shell: ps -ef 
+  register: ps_cmd
+
+- name: Show captured processes
+  debug:
+    var: ps_cmd.stdout
