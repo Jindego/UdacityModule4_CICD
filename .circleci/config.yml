@@ -195,7 +195,7 @@ jobs:
             sudo apt-get -qq install awscli
             cd backend
             npm install
-            npm audit fix
+            npm audit fix --audit-level=critical --force
             npm run build
             npm run migrations > migration.txt
 
@@ -213,7 +213,7 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "Migration Failed" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
               curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
-      - destroy-environment
+    #- destroy-environment
 
      # Here's where you will add some code to rollback on failure      
 
