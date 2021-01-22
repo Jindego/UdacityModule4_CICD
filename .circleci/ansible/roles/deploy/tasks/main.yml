@@ -1,0 +1,28 @@
+ - name: "install pre-reqs for Ansible."
+      become: true
+      apt:
+        name: ["python3", "tar", "gzip"]
+        state: latest
+        update_cache: yes
+
+- name: Create APP Directory
+  become_user: ubuntu
+  become: yes
+  file:
+    path: ~/app
+    state: directory
+
+- name: untar
+  become_user: ubuntu
+  become: yes
+  ignore_errors: True
+  unarchive:
+    src: ~/project/backend.tar
+    dest: ~/app
+   
+- name: Start PM2
+  become_user: ubuntu
+  become: yes
+  shell: |
+    cd ~/app/backend
+    pm2 start npm --name backend -- start 

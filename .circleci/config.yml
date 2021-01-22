@@ -192,9 +192,7 @@ jobs:
           working_directory: ./backend
           command: |
             # sudo apt-get -y -qq update
-            # sudo apt-get -y -qq install python3
             # sudo apt-get -qq install awscli
-            touch .env
             echo ENVIROMENT=production > .env
             echo TYPEORM_CONNECTION=postgres >> .env
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> .env
@@ -269,15 +267,32 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 0d:e9:69:0b:e7:4e:d0:54:77:c3:fa:c0:de:16:04:ab
-      # attach workspace
+      - attach_workspace:
+          at: /tmp
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install python3
+            sudo apt-get -qq install awscli
+            apk add --update ansible
       - run:
           name: Deploy backend
+          working_directory: /tmp
           command: |
-            # your code here
+            file1=(/tmp/backend/.env)
+            echo ENVIROMENT=production > $file1
+            echo TYPEORM_CONNECTION=postgres >> $file1
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $file1
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $file1
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $file1
+            echo TYPEORM_HOST=$TYPEORM_HOST >> $file1
+            echo TYPEORM_PORT=$TYPEORM_PORT >> $file1
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $file1
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $file1
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $file1
+            tar -cvf backend.tar backend
+            ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
@@ -356,5 +371,6 @@ workflows:
       #       requires: [deploy-infrastructure]
      # - run-migrations
             # requires: [configure-infrastructure]
-       - deploy-frontend
+      # - deploy-frontend
       #       requires: [run-migrations]
+      - deploy-backend
