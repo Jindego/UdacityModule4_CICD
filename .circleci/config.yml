@@ -275,7 +275,7 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
             sudo apt-get -qq install awscli
-            apk add --update ansible
+            sudo apt-get -y -qq install ansible
       - run:
           name: Deploy backend
           working_directory: /tmp
