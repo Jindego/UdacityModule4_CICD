@@ -204,7 +204,7 @@ jobs:
             # sudo apt-get -y -qq update
             # sudo apt-get -y -qq install python3
             # sudo apt-get -qq install awscli
-            ls - latr
+            ls -latr
             npm i
             npm run build
             npm run migrations
