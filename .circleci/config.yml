@@ -194,8 +194,10 @@ jobs:
             # sudo apt-get -y -qq install python3
             # sudo apt-get -qq install awscli
             cd backend
+            cp development.env .env
+            cp development.env production.env
             ls
-            # npm run migrations > migration.txt
+            npm run migrations > migration.txt
 
       - run:
           name: Send migration results to memstash
