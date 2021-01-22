@@ -257,7 +257,8 @@ jobs:
             npm run build
             s3Bucket=$(aws s3api list-buckets --query "Buckets[].Name" --output text)
             aws s3 cp dist s3://$s3Bucket/ --recursive
-            echo "http://$s3Bucket.s3-website-us-west-2.amazonaws.com"
+            s3FullUrl=(echo "http://$s3Bucket.s3-website-us-west-2.amazonaws.com")
+            curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -299,25 +300,25 @@ jobs:
 
   smoke-test:
     docker:
-      - image: cimg/base:2020.01 
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apt-get -y -qq update
       - run:
-          name: Get backend url
+          name: Get backend url & Backend smoke test.
           command: |
-            # your code here
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
+            back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
+            curl $back_ip
+
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
+            front_url=$(curl -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request GET https://api.memstash.io/values/s3booket)
+            curl -s ${front_url}
+            
       # Here's where you will add some code to rollback on failure  
 
   cloudfront-update:
@@ -369,11 +370,13 @@ workflows:
       #- scan-backend:
       #   requires: [test-backend]
       - deploy-infrastructure
-      # - configure-infrastructure:
-      #       requires: [deploy-infrastructure]
-      # - run-migrations:
-      #       requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #       requires: [run-migrations]
-      - deploy-backend:
+      - configure-infrastructure:
             requires: [deploy-infrastructure]
+      - run-migrations:
+            requires: [configure-infrastructure]
+      - deploy-frontend:
+            requires: [run-migrations]
+      - deploy-backend:
+            requires: [deploy-frontend]
+      - smoke-test:
+            requires: [deploy-backend]
