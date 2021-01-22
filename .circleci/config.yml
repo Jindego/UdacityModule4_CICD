@@ -208,7 +208,6 @@ jobs:
             ls -latr
             cat .env
             npm i
-            npm run build
             npm run migrations
 
       - run:
