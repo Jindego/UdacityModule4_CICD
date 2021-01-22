@@ -281,7 +281,7 @@ jobs:
           name: Deploy backend
           command: |
             ls -latr
-            file1=(/backend/.env)
+            file1=(backend/.env)
             touch $file1
             echo ENVIROMENT=production > $file1
             echo TYPEORM_CONNECTION=postgres >> $file1
