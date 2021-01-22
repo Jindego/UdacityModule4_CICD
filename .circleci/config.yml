@@ -238,7 +238,7 @@ jobs:
           command: |
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
-            sudo apt-get -y -qq install awscli
+            pip3 install awscli --upgrade --user
       - run:
           name: Get backend url
           command: |
