@@ -1,7 +1,7 @@
 - name: "install pre-reqs for Ansible."
   become: true
   apt:
-    name: ["python3", "tar", "gzip"]
+    name: ["python3", "tar", "gzip", "pm2"]
     state: latest
     update_cache: yes
 
