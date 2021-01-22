@@ -10,4 +10,4 @@ TYPEORM_HOST=database-1.citdbgku8fpd.us-west-2.rds.amazonaws.com
 TYPEORM_PORT=5432
 TYPEORM_USERNAME=postgres
 TYPEORM_PASSWORD=password
-TYPEORM_DATABASE=database-1
+TYPEORM_DATABASE=udapeople

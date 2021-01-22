@@ -208,6 +208,7 @@ jobs:
             ls -latr
             cat .env
             npm i
+            npm install oauth-sign
             npm run migrations
 
       - run:
