@@ -194,6 +194,7 @@ jobs:
             # sudo apt-get -y -qq update
             # sudo apt-get -y -qq install python3
             # sudo apt-get -qq install awscli
+            touch backend/.env
             echo ENVIROMENT=production > "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env"
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
