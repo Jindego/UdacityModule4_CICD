@@ -70,7 +70,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -84,7 +84,7 @@ jobs:
                 
   test-backend:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -97,7 +97,7 @@ jobs:
             
   scan-frontend:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -108,7 +108,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -184,7 +184,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -231,7 +231,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/node:15.6.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -265,8 +265,10 @@ jobs:
     docker:
       - image: python:3.7-alpine3.12 
     steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 0d:e9:69:0b:e7:4e:d0:54:77:c3:fa:c0:de:16:04:ab
       # attach workspace
       - run:
           name: Install dependencies
