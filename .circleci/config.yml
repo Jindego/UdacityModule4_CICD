@@ -178,16 +178,6 @@ jobs:
       - run:
           name: Configure server
           command: |
-            echo ENVIROMENT=production > "backend/.env"
-            echo TYPEORM_CONNECTION=postgres >> "backend/.env"
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
-            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
-            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             ansible-playbook -i /tmp/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
@@ -204,6 +194,16 @@ jobs:
             # sudo apt-get -y -qq update
             # sudo apt-get -y -qq install python3
             # sudo apt-get -qq install awscli
+            echo ENVIROMENT=production > "backend/.env"
+            echo TYPEORM_CONNECTION=postgres >> "backend/.env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             ls -latr
             npm i
             npm run build
@@ -350,9 +350,9 @@ workflows:
       #- scan-backend:
       #   requires: [test-backend]
       # - deploy-infrastructure
-      - configure-infrastructure
+      #- configure-infrastructure
       #     requires: [deploy-infrastructure]
-      - run-migrations:
-           requires: [configure-infrastructure]
+      - run-migrations
+          # requires: [configure-infrastructure]
       # - deploy-frontend:
       #       requires: [run-migrations]
