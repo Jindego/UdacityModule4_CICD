@@ -10,7 +10,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-
+    npm i
 - name: "build backend"
   become: true
   shell: |
