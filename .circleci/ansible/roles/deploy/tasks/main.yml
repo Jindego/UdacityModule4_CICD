@@ -16,7 +16,7 @@
 - name: "copy backend folder"
   become: true
   synchronize:
-    src: ../../backend
+    src: /root/project/.circleci/
     dest: /home/ubuntu/
     recursive: true
 
