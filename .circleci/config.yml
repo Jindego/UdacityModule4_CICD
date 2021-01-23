@@ -285,6 +285,7 @@ jobs:
           name: Deploy backend
           command: |
             ls -latr
+            curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
             touch backend/.env
             echo ENVIROMENT=production > backend/.env
@@ -297,10 +298,10 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
-            tar -cvf backend.tar backend
+            tar -cvf app.tar ./
             cat ansible/inventory.txt
             ls -latr
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
@@ -374,14 +375,14 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-            requires: [deploy-infrastructure]
-      - run-migrations:
-            requires: [configure-infrastructure]
-      - deploy-frontend:
-            requires: [run-migrations]
-      - deploy-backend:
-            requires: [deploy-frontend]
-      - smoke-test:
-            requires: [deploy-backend]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #       requires: [deploy-infrastructure]
+      # - run-migrations:
+      #       requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #       requires: [run-migrations]
+      - deploy-backend
+      #       requires: [deploy-frontend]
+      # - smoke-test:
+      #       requires: [deploy-backend]
