@@ -272,8 +272,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 9e:a8:42:7b:87:90:8f:17:5b:98:80:0c:3e:19:eb:e6
-      - attach_workspace:
-          at: .
+      # - attach_workspace:
+      #     at: .
       - run:
           name: Install dependencies
           command: |
@@ -297,7 +297,7 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
             tar -cvf backend.tar backend
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
