@@ -17,20 +17,20 @@
   become_user: ubuntu
   become: yes
   file:
-    path: /home/ubuntu/backend
+    path: ~/app
     state: directory
 
-- name: "Move backend files to remote server."
-  become: true
-  copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
-
+- name: untar
+  become_user: ubuntu
+  become: yes
+  unarchive:
+    src: ~/project/backend.tar
+    dest: ~/app
    
 - name: Start PM2
   become_user: ubuntu
   become: yes
   shell: |
-    cd /home/ubuntu/backend
+    cd ~/app/backend
     npm run build
     pm2 start npm --name backend -- start 
