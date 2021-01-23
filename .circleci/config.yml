@@ -285,7 +285,7 @@ jobs:
           name: Deploy backend
           command: |
             ls -latr
-            curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip >> .circleci/ansible/inventory.txt
+            echo "3.249.44.93" >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
             touch backend/.env
             echo ENVIROMENT=production > backend/.env
