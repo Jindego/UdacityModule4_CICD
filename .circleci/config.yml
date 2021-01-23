@@ -283,27 +283,25 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible curl rsync nodejs npm openssh
+            apk add --update ansible tar gzip ansible nodejs npm
             pip install awscli
       - run:
           name: Deploy backend
           command: |
-            ls -latr
-            echo "34.247.180.141" >> .circleci/ansible/inventory.txt
-            touch backend/.env
-            echo ENVIROMENT=production > "backend/.env"
-            echo TYPEORM_CONNECTION=postgres >> "backend/.env"
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
-            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
-            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-            ls -latr
-            cd .circleci/ansible
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.txt deploy-backend.yml -vv
+            [[ ! -d backend ]] && mkdir backend
+            envfile="backend/.env"
+            echo ENVIROMENT=production > $envfile
+            echo TYPEORM_CONNECTION=postgres >> $envfile
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $envfile
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $envfile
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $envfile
+            echo TYPEORM_HOST=$TYPEORM_HOST >> $envfile
+            echo TYPEORM_PORT=$TYPEORM_PORT >> $envfile
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $envfile
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $envfile
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $envfile
+            tar -cvf backend.tar backend
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
