@@ -264,6 +264,10 @@ jobs:
             s3FullUrl=("http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
             curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket
             # aws s3 cp dist s3://$s3Bucket/ --recursive
+      - persist_to_workspace:
+          root: .
+          paths:
+            - frontend/dist
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -279,14 +283,14 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip ansible nodejs npm curl rsync openssh
+            apk add --update ansible curl rsync nodejs npm openssh
             pip install awscli
       - run:
           name: Deploy backend
           command: |
             ls -latr
-            echo "3.250.149.72" >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
+            cat inventory.txt
+            cp inventory.txt .circleci/ansible
             touch backend/.env
             echo ENVIROMENT=production > "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env"
@@ -299,7 +303,8 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             ls -latr
-            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml -vv
+            cd .circleci/ansible
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.txt deploy-backend.yml -vv
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
