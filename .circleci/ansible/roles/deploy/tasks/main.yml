@@ -1,11 +1,23 @@
   
 ---
+
+- name: "Installing Rsync"
+  apt: >
+    pkg={{ item }}
+    state=latest
+    update_cache=yes
+    cache_valid_time=3600
+  with_items:
+  - rsync
+  
 - name: "copy backend folder"
   become: true
   synchronize:
     src: ../../backend
     dest: /home/ubuntu/
     recursive: true
+
+
 
 - name: "install node dependencies"
   become: true
