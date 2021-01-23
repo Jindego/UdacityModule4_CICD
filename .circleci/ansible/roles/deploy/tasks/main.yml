@@ -13,26 +13,26 @@
     production: yes
     state: present
 
-- name: Create APP Directory
-  become_user: ubuntu
-  become: yes
-  file:
-    path: ~/app
-    state: directory
+---
+- name: "copy backend folder"
+  become: true
+  synchronize:
+    src: ../../backend
+    dest: /home/ubuntu/
+    recursive: true
 
-- name: untar
-  become_user: ubuntu
-  become: yes
-  unarchive:
-    src: ~/project/backend.tar
-    dest: ~/app
-   
-- name: Start PM2
-  become_user: ubuntu
-  become: yes
+- name: "install node dependencies"
+  become: true
   shell: |
-    cd ~/app/backend
-    npm install oauth-sign
-    npm install typescript
+    cd /home/ubuntu/backend
+    npm i
+- name: "build backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
     npm run build
-    pm2 start npm --name backend -- start 
+- name: "start backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend    
+    pm2 start npm -- run start
