@@ -13,7 +13,6 @@
     production: yes
     state: present
 
----
 - name: "copy backend folder"
   become: true
   synchronize:
