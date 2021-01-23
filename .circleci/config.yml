@@ -242,7 +242,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - attach_workspace:
-           at: .
+          at: .
       - run:
           name: Get backend url
           command: |
@@ -275,7 +275,7 @@ jobs:
           fingerprints:
             - 9e:a8:42:7b:87:90:8f:17:5b:98:80:0c:3e:19:eb:e6
      - attach_workspace:
-           at: .
+        at: .
       - run:
           name: Install dependencies
           command: |
