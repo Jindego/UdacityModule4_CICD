@@ -324,7 +324,13 @@ jobs:
           name: Frontend smoke test.
           command: |
             front_url=$(curl -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request GET https://api.memstash.io/values/s3booket)
-            curl -s ${front_url}
+            if curl -s ${front_url} | grep "Welcome"
+            then
+            return 1
+            else
+            echo "This is an intentional fail for screenshot6"
+            return 1
+            fi
             
       # Here's where you will add some code to rollback on failure  
 
@@ -376,14 +382,14 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      - deploy-infrastructure
-      - configure-infrastructure:
-            requires: [deploy-infrastructure]
-      - run-migrations:
-            requires: [configure-infrastructure]
-      - deploy-frontend:
-            requires: [run-migrations]
-      - deploy-backend:
-            requires: [deploy-frontend]
-      - smoke-test:
-            requires: [deploy-backend]
+      # - deploy-infrastructure
+      # - configure-infrastructure:
+      #       requires: [deploy-infrastructure]
+      # - run-migrations:
+      #       requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #       requires: [run-migrations]
+      # - deploy-backend:
+      #       requires: [deploy-frontend]
+      - smoke-test
+            # requires: [deploy-backend]
