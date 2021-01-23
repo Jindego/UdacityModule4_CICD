@@ -1,36 +1,36 @@
-  
----
-
-- name: "Installing Rsync"
-  apt: >
-    pkg={{ item }}
-    state=latest
-    update_cache=yes
-    cache_valid_time=3600
-  with_items:
-  - rsync
-  
-- name: "copy backend folder"
+- name: "install pre-reqs for Ansible."
   become: true
-  synchronize:
-    src: ../../backend
-    dest: /home/ubuntu/
-    recursive: true
+  apt:
+    name: ["python3", "tar", "gzip", "nodejs", "npm"]
+    state: latest
+    update_cache: yes
 
-
-
-- name: "install node dependencies"
+- name: "install pm2"
   become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
+- name: Create APP Directory
+  become_user: ubuntu
+  become: yes
+  file:
+    path: ~/app
+    state: directory
+
+- name: untar
+  become_user: ubuntu
+  become: yes
+  unarchive:
+    src: ~/project/backend.tar
+    dest: ~/app
+   
+- name: Start PM2
+  become_user: ubuntu
+  become: yes
   shell: |
-    cd /home/ubuntu/backend
-    npm i
-- name: "build backend"
-  become: true
-  shell: |
-    cd /home/ubuntu/backend
+    cd ~/app/backend
     npm run build
-- name: "start backend"
-  become: true
-  shell: |
-    cd /home/ubuntu/backend    
-    pm2 start npm -- run start
+    pm2 start npm --name backend -- start 
