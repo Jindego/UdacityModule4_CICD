@@ -1,19 +1,4 @@
 ---
-# - name: "install pre-reqs for Ansible."
-#   become: true
-#   apt:
-#     name: ["python3", "tar", "gzip", "nodejs", "npm"]
-#     state: latest
-#     update_cache: yes
-
-# - name: "install pm2"
-#   become: true
-#   npm:
-#     name: pm2
-#     global: yes
-#     production: yes
-#     state: present
-
 - name: "copy backend folder"
   become: true
   synchronize:
@@ -21,14 +6,18 @@
     dest: /home/ubuntu/
     recursive: true
 
-# - name: "build backend"
-#   become: true
-#   shell: |
-#     cd /home/ubuntu/backend
-#     npm run build
-
-# - name: "start backend"
-#   become: true
-#   shell: |
-#     cd /home/ubuntu/backend    
-#     pm2 start npm -- run start
+- name: "install node dependencies"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm i
+- name: "build backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+- name: "start backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend    
+    pm2 start npm -- run start
