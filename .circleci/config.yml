@@ -241,6 +241,8 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+      - attach_workspace:
+           at: .
       - run:
           name: Get backend url
           command: |
@@ -272,8 +274,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 9e:a8:42:7b:87:90:8f:17:5b:98:80:0c:3e:19:eb:e6
-      # - attach_workspace:
-      #     at: .
+     - attach_workspace:
+           at: .
       - run:
           name: Install dependencies
           command: |
@@ -283,7 +285,6 @@ jobs:
           name: Deploy backend
           command: |
             ls -latr
-            curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
             touch backend/.env
             echo ENVIROMENT=production > backend/.env
@@ -371,14 +372,14 @@ workflows:
      #     requires: [test-frontend]
       #- scan-backend:
       #   requires: [test-backend]
-      # - deploy-infrastructure
-      # - configure-infrastructure:
-      #       requires: [deploy-infrastructure]
-      # - run-migrations:
-      #       requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #       requires: [run-migrations]
-      - deploy-backend
-      #       requires: [deploy-frontend]
-      # - smoke-test:
-      #       requires: [deploy-backend]
+      - deploy-infrastructure
+      - configure-infrastructure:
+            requires: [deploy-infrastructure]
+      - run-migrations:
+            requires: [configure-infrastructure]
+      - deploy-frontend:
+            requires: [run-migrations]
+      - deploy-backend:
+            requires: [deploy-frontend]
+      - smoke-test:
+            requires: [deploy-backend]
