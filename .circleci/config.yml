@@ -326,10 +326,10 @@ jobs:
             # front_url=$(curl -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request GET https://api.memstash.io/values/s3booket)
             if curl -s http://udapeople-d99b088.s3-website-eu-west-1.amazonaws.com | grep "Welcome"
             then
-              return 1
+              exit 1
             else
               echo "This is an intentional fail for screenshot6"
-              return 1
+              exit 1
             fi
             
       # Here's where you will add some code to rollback on failure  
