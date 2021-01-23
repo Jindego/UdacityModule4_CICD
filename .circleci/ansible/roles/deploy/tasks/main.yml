@@ -1,43 +1,27 @@
-- name: "install pre-reqs for Ansible."
-  become: true
-  apt:
-    name: ["python3", "tar", "gzip", "nodejs", "npm"]
-    state: latest
-    update_cache: yes
-
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
-- name: Create APP Directory
-  become_user: ubuntu
-  become: yes
+- name: Creates directory
   file:
-    path: ~/app
+    path: /home/ubuntu/backend
     state: directory
+- name: "move backend files to server."
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu
 
-- name: untar
-  become_user: ubuntu
-  become: yes
-  unarchive:
-    src: ~/project/backend.tar
-    dest: ~/app
-   
-- name: Start PM2
-  become_user: ubuntu
-  become: yes
+- name: "install package dependencies"
   shell: |
-    cd ~/app/backend
-    pm2 start npm --name backend -- start 
-
-- name: Check running processes
-  shell: ps -ef 
-  register: ps_cmd
-
-- name: Show captured processes
-  debug:
-    var: ps_cmd.stdout
+    cd /home/ubuntu/backend
+    npm install
+- name: "build package"
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+- name: "run migrations again"
+  shell: |
+    cd /home/ubuntu/backend
+    npm run migrations
+- name: Executing node
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm --name backend -- start
+    pm2 ls
