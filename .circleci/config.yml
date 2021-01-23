@@ -10,6 +10,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
+            aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
             aws cloudformation delete-stack --stack-name udapeople-backendStack-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name udapeople-frontendStack-${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -157,8 +158,7 @@ jobs:
       - persist_to_workspace:
           root: .circleci
           paths:
-            - ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+            - ansible/inventory.txt  
       - destroy-environment
 
   configure-infrastructure:
@@ -224,7 +224,7 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "Migration Failed" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
               curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
-    #- destroy-environment
+      - destroy-environment
 
      # Here's where you will add some code to rollback on failure      
 
@@ -268,7 +268,7 @@ jobs:
           root: .
           paths:
             - frontend/dist
-      # Here's where you will add some code to rollback on failure      
+      - destroy-environment     
                     
   deploy-backend:
     docker:
@@ -303,7 +303,7 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $envfile
             tar -cvf backend.tar backend
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
-      # Here's where you will add some code to rollback on failure  
+      - destroy-environment 
 
   smoke-test:
     docker:
@@ -332,7 +332,7 @@ jobs:
               exit 1
             fi
             
-      # Here's where you will add some code to rollback on failure  
+      - destroy-environment 
 
   cloudfront-update:
     docker:
