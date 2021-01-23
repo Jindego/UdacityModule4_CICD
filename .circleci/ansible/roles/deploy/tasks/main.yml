@@ -1,35 +1,29 @@
-- name: "install pre-reqs for Ansible."
-  become: true
-  apt:
-    name: ["python3", "tar", "gzip", "nodejs", "npm"]
-    state: latest
-    update_cache: yes
-
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
-- name: Create APP Directory
-  become_user: ubuntu
-  become: yes
+---
+- name: "Creates directory"
   file:
-    path: ~/app
+    path: /home/ubuntu/backend
     state: directory
+    
+- name: "Move backend files to remote server."
+  become: true
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu
 
-- name: untar
-  become_user: ubuntu
-  become: yes
-  unarchive:
-    src: ~/project/backend.tar
-    dest: ~/app
-   
-- name: Start PM2
-  become_user: ubuntu
-  become: yes
+- name: "Install dependencies"
   shell: |
-    cd ~/app/backend
-    pm2 start npm --name backend -- start 
+    cd /home/ubuntu/backend   
+    ls -la 
+    npm install
+    
+- name: "build package"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+- name: "run server"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm -- run "start:dev"
+    pm2 ls
