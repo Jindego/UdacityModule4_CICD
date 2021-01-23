@@ -1,36 +1,23 @@
-- name: "install pre-reqs for Ansible."
+---
+- name: "copy backend folder"
   become: true
-  apt:
-    name: ["python3", "tar", "gzip", "nodejs", "npm"]
-    state: latest
-    update_cache: yes
+  synchronize:
+    src: ../../backend
+    dest: /home/ubuntu/
+    recursive: true
 
-- name: "install pm2"
+- name: "install node dependencies"
   become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
-- name: Create APP Directory
-  become_user: ubuntu
-  become: yes
-  file:
-    path: ~/app
-    state: directory
-
-- name: untar
-  become_user: ubuntu
-  become: yes
-  unarchive:
-    src: ~/project/backend.tar
-    dest: ~/app
-   
-- name: Start PM2
-  become_user: ubuntu
-  become: yes
   shell: |
-    cd ~/app/backend
+    cd /home/ubuntu/backend
+    npm i
+- name: "build backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
     npm run build
-    pm2 start npm --name backend -- start 
+- name: "start backend"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend    
+    pm2 start npm -- run start
