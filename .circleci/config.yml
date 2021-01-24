@@ -115,6 +115,7 @@ jobs:
           name: Run an audit of the backend
           command: |
             cd ./backend
+            npm i
             npm audit fix --audit-level=critical --force
           
 
