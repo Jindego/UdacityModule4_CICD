@@ -394,10 +394,10 @@ jobs:
               AWS_PAGER="" aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text > newid.txt
               new_id=$(cat newid.txt)
 
-              echo $stacks
+              echo $stacks > stacks.txt
               echo $new_id
 
-              for i in $stacks
+              for i in `cat stacks.txt`
               do
               echo $i | grep -v Cloudfront | grep -v $new_id | awk -F '-' '{print $3}' 
               done
