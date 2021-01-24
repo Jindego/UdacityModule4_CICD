@@ -349,7 +349,7 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --tags project=udapeople \
               --stack-name "udapeople-cloudfront" \
-              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0-7}" 
+              --parameter-overrides WorkflowID="0345695" 
 
 cleanup:
     docker:
