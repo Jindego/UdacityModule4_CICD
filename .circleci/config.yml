@@ -374,32 +374,32 @@ jobs:
 
 
 
-cleanup:
-    docker:
-      - image: cimg/base:2020.01 
-    steps:
-      - checkout
-      - run:
-          name: Get current and old id's
-          command: |
-            export stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
-            export new_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
-      - run:
-          name: Remove old stacks and files
-          command: |
-            for i in $stacks
-            do
-            echo $i | grep -v $new_id | awk -F '-' '{print $3}' >> ids.txt
-            done
+  cleanup:
+      docker:
+        - image: cimg/base:2020.01 
+      steps:
+        - checkout
+        - run:
+            name: Get current and old id's
+            command: |
+              export stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
+              export new_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+        - run:
+            name: Remove old stacks and files
+            command: |
+              for i in $stacks
+              do
+              echo $i | grep -v $new_id | awk -F '-' '{print $3}' >> ids.txt
+              done
 
-            cat ids.txt | sort -u >> oldstacks.txt
+              cat ids.txt | sort -u >> oldstacks.txt
 
-            for stack in `cat oldstacks.txt`
-            do
-            aws s3 rm "s3://udapeople-$stack" --recursive
-            aws cloudformation delete-stack --stack-name udapeople-backendStack-$stack
-            aws cloudformation delete-stack --stack-name udapeople-frontendStack-$stack
-            done
+              for stack in `cat oldstacks.txt`
+              do
+              aws s3 rm "s3://udapeople-$stack" --recursive
+              aws cloudformation delete-stack --stack-name udapeople-backendStack-$stack
+              aws cloudformation delete-stack --stack-name udapeople-frontendStack-$stack
+              done
             
 
 workflows:
