@@ -380,13 +380,11 @@ jobs:
       steps:
         - checkout
         - run:
-            name: Get current and old id's
-            command: |
-              export stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
-              export new_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
-        - run:
             name: Remove old stacks and files
             command: |
+              stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
+              new_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+
               for i in $stacks
               do
               echo $i | grep -v $new_id | awk -F '-' '{print $3}' >> ids.txt
