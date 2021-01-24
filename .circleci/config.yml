@@ -390,9 +390,12 @@ jobs:
 
               for i in $stacks
               do
-              echo $i | grep -v Cloudfront | grep -v $new_id | awk -F '-' '{print $3}' >> ids.txt
+              echo $i >> ids.txt
               done
-              cat ids.txt
+              grep -v Cloudfront ids.txt >> ids2.txt
+              grep -v $new_id ids2.txt >> ids3.txt
+              awk -f ids3.txt -F '-' '{print $3}' >> ids4.txt
+              cat ids4.txt
 
               cat ids.txt | sort -u >> oldstacks.txt
 
