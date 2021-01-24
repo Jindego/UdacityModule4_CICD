@@ -361,10 +361,13 @@ jobs:
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
             else
-              aws cloudformation update-stack \
-              --template-body .circleci/files/cloudfront.yml \
+              aws cloudformation delete-stack --stack-name Udapeople-Cloudfront
+              sleep 300
+              aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
               --stack-name "Udapeople-Cloudfront" \
-              --parameters ParameterKey=WorkflowID,ParameterValue="${CIRCLE_WORKFLOW_ID:0:7}"
+              --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
             fi
 
       - destroy-environment 
