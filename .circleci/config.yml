@@ -314,14 +314,15 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get -y -qq update
+            sudo apt-get -y install less
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
           name: Get backend url & Backend smoke test.
           command: |
-           # back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
-           # curl -vvv "http://34.241.117.151:3030/api/status"
+            back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
+            curl -vvv "http://34.241.117.151:3030/api/status"
 
       - run:
           name: Frontend smoke test.
