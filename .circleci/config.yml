@@ -384,6 +384,7 @@ jobs:
             command: |
               chmod 755 Cleanup.sh
               ./Cleanup.sh
+              cat ids.txt
             
 
 workflows:
