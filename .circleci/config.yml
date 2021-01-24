@@ -13,7 +13,6 @@ commands:
             aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
             aws cloudformation delete-stack --stack-name udapeople-backendStack-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name udapeople-frontendStack-${CIRCLE_WORKFLOW_ID:0:7}
-            aws cloudformation delete-stack --stack-name Udapeople-Cloudfront-${OLD_CIRCLE_WORKFLOW_ID:0:7}
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -149,11 +148,11 @@ jobs:
           command: |
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
             backendip=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendip" https://api.memstash.io/values/ec2_back_ip
+            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendip" https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID}
 
 
             backendurl=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
-            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendurl" https://api.memstash.io/values/ec2_back_url
+            curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendurl" https://api.memstash.io/values/ec2_back_url_${CIRCLE_WORKFLOW_ID}
 
       - persist_to_workspace:
           root: .circleci
@@ -246,7 +245,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            API_IPback=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
+            API_IPback=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID})
             export API_URL=$(echo "https://$API_IPback:3030")
             cd frontend
             echo "${API_URL}" > apiurl.txt
@@ -263,7 +262,7 @@ jobs:
             echo $s3Bucket
             aws s3 sync dist s3://$s3Bucket/
             s3FullUrl=("http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
-            curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket
+            curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket_${CIRCLE_WORKFLOW_ID}
             # aws s3 cp dist s3://$s3Bucket/ --recursive
       - persist_to_workspace:
           root: .
@@ -322,13 +321,13 @@ jobs:
       - run:
           name: Get backend url & Backend smoke test.
           command: |
-            back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip)
+            back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID})
             curl -vvv "http://$back_ip:3030/api/status"
 
       - run:
           name: Frontend smoke test.
           command: |
-            front_url=$(curl -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request GET https://api.memstash.io/values/s3booket)
+            front_url=$(curl -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request GET https://api.memstash.io/values/s3booket_${CIRCLE_WORKFLOW_ID})
             if curl -s ${front_url} | grep "Welcome"
             then
               echo "Frontend alive"
