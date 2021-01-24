@@ -350,7 +350,7 @@ jobs:
             echo "Update CloudFront"
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name Udapeople-Cloudfront-${OLD_CIRCLE_WORKFLOW_ID:0:7} \
+              --stack-name "Udapeople-Cloudfront-${CIRCLE_WORKFLOW_ID:0:7}" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment 
