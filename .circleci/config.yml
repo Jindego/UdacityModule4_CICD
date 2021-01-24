@@ -115,6 +115,7 @@ jobs:
           name: Run an audit of the backend
           command: |
             cd ./backend
+            npm i
             npm audit fix --audit-level=critical --force
           
 
@@ -399,7 +400,7 @@ workflows:
             requires: [test-backend]
       - deploy-infrastructure:
             requires: [scan-frontend, scan-backend]
-              filters:
+            filters:
                 branches:
                   only:
                     - master
