@@ -381,6 +381,7 @@ jobs:
         - run:
             name: Remove old stacks and files
             command: |
+              sleep 240
               chmod 755 Cleanup.sh
               ./Cleanup.sh
             
@@ -388,18 +389,18 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-            requires: [build-frontend]
-      - test-backend:
-            requires: [build-backend]
-      - scan-frontend:
-            requires: [test-frontend]
-      - scan-backend:
-            requires: [test-backend]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #       requires: [build-frontend]
+      # - test-backend:
+      #       requires: [build-backend]
+      # - scan-frontend:
+      #       requires: [test-frontend]
+      # - scan-backend:
+      #       requires: [test-backend]
       - deploy-infrastructure:
-            requires: [scan-frontend, scan-backend]
+            # requires: [scan-frontend, scan-backend]
             filters:
                 branches:
                   only:
