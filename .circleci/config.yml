@@ -399,7 +399,7 @@ workflows:
             requires: [test-backend]
       - deploy-infrastructure:
             requires: [scan-frontend, scan-backend]
-              filters:
+            filters:
                 branches:
                   only:
                     - master
