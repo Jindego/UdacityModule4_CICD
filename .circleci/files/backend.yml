@@ -6,10 +6,6 @@ Parameters:
     Description: Unique identifier.
     Type: String
 
-  WorkflowID:
-    Description: Unique identifier.
-    Type: String
-
 Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -41,8 +37,8 @@ Resources:
           Value: !Sub backend-${ID}
 
 Outputs:
-  WorkflowID:
-    Value: !Sub ${WorkflowID}
-    Description: URL for website hosted on S3
+  ID:
+    Value: !Sub ${ID}
+    Description: ID
     Export:
-      Name: WorkflowID
+      Name: ID
