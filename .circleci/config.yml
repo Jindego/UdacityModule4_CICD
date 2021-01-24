@@ -149,13 +149,12 @@ jobs:
             cwid=$(echo "aws ec2 describe-instances --filters 'Name=tag:project,Values=udapeopleBackend_${CIRCLE_WORKFLOW_ID:0:7}' --query 'Reservations[*].Instances[*].PublicIpAddress' --output text")
             echo $cwid > backip.sh; chmod 755 backip.sh
             ./backip.sh >> .circleci/ansible/inventory.txt
-            ./backip.sh
-            cat .circleci/ansible/inventory.txt
-            backendip=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            backendip=$(./backip.sh)
             curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendip" https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID}
 
-
-            backendurl=$(aws ec2 describe-instances --filters 'Name=tag:project,Values="udapeopleBackend_${CIRCLE_WORKFLOW_ID:0:7}"' --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
+            cwid2=$(echo "aws ec2 describe-instances --filters 'Name=tag:project,Values="udapeopleBackend_${CIRCLE_WORKFLOW_ID:0:7}"' --query 'Reservations[*].Instances[*].PublicDnsName' --output text")
+            echo $cwid2 > backurl.sh; chmod 755 backurl.sh
+            backendurl=$(./backurl.sh)
             curl -H "Content-Type: text/plain" -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request PUT --data "$backendurl" https://api.memstash.io/values/ec2_back_url_${CIRCLE_WORKFLOW_ID}
 
       - persist_to_workspace:
@@ -351,9 +350,11 @@ jobs:
           name: Update cloudfront distribution
           command: |
             echo "Update CloudFront"
+            check_for_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+            if [ -z $check_for_id ]
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name "Udapeople-Cloudfront-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name "Udapeople-Cloudfront" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment 
