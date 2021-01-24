@@ -372,7 +372,7 @@ cleanup:
     docker:
       - image: cimg/base:2020.01 
     steps:
-      # Checkout code from git
+      # Checkout code from git 
       - run:
           name: Get old stack workflow id
           command: |
