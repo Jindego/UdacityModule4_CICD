@@ -382,33 +382,7 @@ jobs:
         - run:
             name: Remove old stacks and files
             command: |
-              #!/bin/sh
-              set -x
-              stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
-              AWS_PAGER="" aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text > newid.txt
-              new_id=$(cat newid.txt)
-
-              for i in $stacks
-              do
-              echo $i >> ids.txt
-              done
-              grep -v Cloudfront ids.txt >> ids2.txt
-              grep -v $new_id ids2.txt >> ids3.txt
-              awk -f ids3.txt -F '-' '{print $3}' >> ids4.txt
-              cat ids4.txt
-
-              cat ids.txt | sort -u >> oldstacks.txt
-
-              cat oldstacks.txt
-              for stack in `cat oldstacks.txt`
-              do
-              echo "s3 $stack"
-              aws s3 rm "s3://udapeople-$stack" --recursive
-              echo "delete backend $stack"
-              aws cloudformation delete-stack --stack-name udapeople-backendStack-$stack
-              echo "delete frontend $stack"
-              aws cloudformation delete-stack --stack-name udapeople-frontendStack-$stack
-              done
+              ./Cleanup.sh
             
 
 workflows:
