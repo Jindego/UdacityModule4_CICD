@@ -348,15 +348,25 @@ jobs:
       - checkout
       - run:
           name: Update cloudfront distribution
+          # If we have the cloudfront stack existing, update. if not then create from scratch
           command: |
             echo "Update CloudFront"
             check_for_id=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+
             if [ -z $check_for_id ]
-            aws cloudformation deploy \
+            then
+              aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --stack-name "Udapeople-Cloudfront" \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
+            else
+              aws cloudformation update-stack \
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name "Udapeople-Cloudfront" \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
+            fi
+
       - destroy-environment 
 
 
