@@ -389,7 +389,8 @@ jobs:
             name: Remove old stacks and files
             command: |
               stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
-              new_id=$(aws cloudformation list-exports --query "Exports[?Name=='CircleCI-WorkflowID'].Value" --output text)
+              aws cloudformation list-exports --query "Exports[?Name=='CircleCI-WorkflowID'].Value" --output text > newid.txt
+              new_id=$(cat newid.txt)
 
               echo $stacks
               echo $new_id
