@@ -274,7 +274,7 @@ jobs:
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
-  # Make sure ubuntu is 20.04 in backend.yml or you will have issues with PM2
+  # Make sure ubuntu is 20.04 in backend.yml or you will have issues with PM2 
     steps:
       - checkout
       - add_ssh_keys:
@@ -361,7 +361,7 @@ cleanup:
     docker:
       - image: cimg/base:2020.01 
     steps:
-      # Checkout code from git 
+      - checkout
       - run:
           name: Get old stack workflow id
           command: |
