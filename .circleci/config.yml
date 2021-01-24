@@ -382,7 +382,7 @@ jobs:
         - run:
             name: Remove old stacks and files
             command: |
-              #!/bin/bash
+              #!/bin/sh
               set -x
               stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
               AWS_PAGER="" aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text > newid.txt
@@ -390,7 +390,7 @@ jobs:
 
               for i in $stacks
               do
-              echo $i \| grep -v Cloudfront \| grep -v $new_id \| awk -F '-' '{print $3}' >> ids.txt
+              echo $i | grep -v Cloudfront | grep -v $new_id | awk -F '-' '{print $3}' >> ids.txt
               done
               cat ids.txt
 
