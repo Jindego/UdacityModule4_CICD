@@ -14,6 +14,11 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: Origin Access Identity for Serverless Static Website
 
+  httponly:
+    Type: "AWS::CloudFront::Distribution CustomOriginConfig"
+    Properties:
+      OriginProtocolPolicy: http-only
+
   WebpageCDN:
     Type: AWS::CloudFront::Distribution
     Properties:
