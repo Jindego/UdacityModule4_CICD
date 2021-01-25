@@ -1,4 +1,4 @@
-
+# This script grabs all of the old id's and performs a cleanup
 stacks=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
 AWS_PAGER="" aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text > newid.txt
 new_id=$(cat newid.txt)

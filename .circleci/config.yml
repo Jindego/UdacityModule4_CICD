@@ -15,9 +15,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-frontendStack-${CIRCLE_WORKFLOW_ID:0:7}
 
   revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      # Add parameter here     
+    description: Revert the last migration if successfully run in the current workflow.  
     steps:
       - run:
           name: Revert migrations
@@ -194,8 +192,6 @@ jobs:
           name: Run migrations
           working_directory: ./backend
           command: |
-            # sudo apt-get -y -qq update
-            # sudo apt-get -qq install awscli
             touch .env
             echo ENVIROMENT=production > .env
             echo TYPEORM_CONNECTION=postgres >> .env
@@ -216,7 +212,7 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
-            #!/bin/bash -x
+            #!/bin/bash
             cd backend
             cat migrationresult.txt
             if [ $(grep -i "has been executed successfully" migrationresult.txt | wc -l) -ge 1 ]
@@ -240,7 +236,6 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
@@ -263,11 +258,9 @@ jobs:
             npm i
             npm run build
             s3Bucket=$(echo "udapeople-${CIRCLE_WORKFLOW_ID:0:7}")
-            echo $s3Bucket
             aws s3 sync dist s3://$s3Bucket/
             s3FullUrl=("http://$s3Bucket.s3-website-eu-west-1.amazonaws.com")
             curl -H "Content-Type: text/plain" -H "token: 003cd2b7-b87c-46b5-8507-de70c677d511" --request PUT --data "$s3FullUrl" https://api.memstash.io/values/s3booket_${CIRCLE_WORKFLOW_ID}
-            # aws s3 cp dist s3://$s3Bucket/ --recursive
       - persist_to_workspace:
           root: .
           paths:
@@ -277,7 +270,7 @@ jobs:
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
-  # Make sure ubuntu is 20.04 in backend.yml or you will have issues with PM2 
+  # Make sure ubuntu is 20.04 in backend.yml or you will have issues with PM2. read .circleci/backend/files for more info
     steps:
       - checkout
       - add_ssh_keys:
@@ -294,39 +287,38 @@ jobs:
           name: Deploy backend
           command: |
             [[ ! -d backend ]] && mkdir backend
-            envfile="backend/.env"
-            echo ENVIROMENT=production > $envfile
-            echo TYPEORM_CONNECTION=postgres >> $envfile
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $envfile
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $envfile
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $envfile
-            echo TYPEORM_HOST=$TYPEORM_HOST >> $envfile
-            echo TYPEORM_PORT=$TYPEORM_PORT >> $envfile
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $envfile
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $envfile
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $envfile
+            myenv="backend/.env"
+            echo ENVIROMENT=production > $myenv
+            echo TYPEORM_CONNECTION=postgres >> $myenv
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $myenv
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $myenv
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $myenv
+            echo TYPEORM_HOST=$TYPEORM_HOST >> $myenv
+            echo TYPEORM_PORT=$TYPEORM_PORT >> $myenv
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $myenv
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $myenv
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $myenv
             tar -cvf backend.tar backend
             ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - destroy-environment 
 
   smoke-test:
     docker:
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get -y install less
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
       - run:
           name: Get backend url & Backend smoke test.
           command: |
             back_ip=$(curl -H "token: bc0ecb36-991a-4dc2-a4a3-5fc4ea7814bd" --request GET https://api.memstash.io/values/ec2_back_ip_${CIRCLE_WORKFLOW_ID})
-            curl -vvv "http://$back_ip:3030/api/status"
+             if curl -s "http://$back_ip:3030/api/status" | grep "ok"
+            then
+              echo "Backend alive, Proceeding"
+            else
+              echo "Debug Info Below"
+              curl -vvv "http://$back_ip:3030/api/status"
+              exit 1
+            fi
 
       - run:
           name: Frontend smoke test.
@@ -336,6 +328,8 @@ jobs:
             then
               echo "Frontend alive"
             else
+              echo "Debug Info Below"
+              url -vvv ${front_url}
               exit 1
             fi
             
@@ -389,18 +383,18 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #       requires: [build-frontend]
-      # - test-backend:
-      #       requires: [build-backend]
-      # - scan-frontend:
-      #       requires: [test-frontend]
-      # - scan-backend:
-      #       requires: [test-backend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+            requires: [build-frontend]
+      - test-backend:
+            requires: [build-backend]
+      - scan-frontend:
+            requires: [test-frontend]
+      - scan-backend:
+            requires: [test-backend]
       - deploy-infrastructure:
-            # requires: [scan-frontend, scan-backend]
+            requires: [scan-frontend, scan-backend]
             filters:
                 branches:
                   only:
