@@ -381,6 +381,7 @@ jobs:
         - run:
             name: Remove old stacks and files
             command: |
+              sleep 240
               chmod 755 Cleanup.sh
               ./Cleanup.sh
             
