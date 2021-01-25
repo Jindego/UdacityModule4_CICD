@@ -19,9 +19,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - CustomOriginConfig:
-              OriginProtocolPolicy: http-only
-          - DomainName: !Sub "udapeople-${WorkflowID}.s3.amazonaws.com"
+          - DomainName: !Sub "http://udapeople-${WorkflowID}.s3.amazonaws.com"
             Id: webpage
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
