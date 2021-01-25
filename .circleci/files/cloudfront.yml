@@ -14,16 +14,13 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: Origin Access Identity for Serverless Static Website
 
-  httponly:
-    Type: "AWS::CloudFront::Distribution CustomOriginConfig"
-    Properties:
-      OriginProtocolPolicy: http-only
-
   WebpageCDN:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
+          - CustomOriginConfig:
+              OriginProtocolPolicy: http-only
           - DomainName: !Sub "udapeople-${WorkflowID}.s3.amazonaws.com"
             Id: webpage
             S3OriginConfig:
