@@ -22,7 +22,7 @@ Resources:
           - DomainName: !Sub "udapeople-${WorkflowID}.s3-website-eu-west-1"
             Id: webpage
             CustomOriginConfig:
-              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
+              OriginProtocolPolicy: http-only
         Enabled: True
         DefaultRootObject: index.html
         DefaultCacheBehavior:
