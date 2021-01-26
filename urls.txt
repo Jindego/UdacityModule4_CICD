@@ -1,0 +1,5 @@
+URL1 - https://github.com/Jindego/UdacityModule4_CICD
+URL2 - http://udapeople-d9b614e.s3-website-eu-west-1.amazonaws.com
+URL3 - http://d39esijjfvl77x.cloudfront.net/
+URL4 - http://ec2-176-34-219-49.eu-west-1.compute.amazonaws.com:3030/api/status
+URL5 - http://ec2-34-242-217-225.eu-west-1.compute.amazonaws.com:9090/graph
