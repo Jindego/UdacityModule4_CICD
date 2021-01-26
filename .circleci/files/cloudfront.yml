@@ -21,7 +21,7 @@ Resources:
         Origins:
           - DomainName: !Sub "udapeople-${WorkflowID}.s3-website-eu-west-1"
             Id: webpage
-            S3OriginConfig:
+            CustomOriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         Enabled: True
         DefaultRootObject: index.html
