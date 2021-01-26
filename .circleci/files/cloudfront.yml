@@ -19,9 +19,11 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: !Sub "udapeople-${WorkflowID}.s3-website-eu-west-1"
+          - DomainName: !Sub "udapeople-${WorkflowID}.s3-website-eu-west-1.amazonaws.com"
             Id: webpage
             CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
               OriginProtocolPolicy: http-only
         Enabled: True
         DefaultRootObject: index.html
